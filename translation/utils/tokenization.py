@@ -1,0 +1,80 @@
+import os
+import sys
+from underthesea import word_tokenize
+from torchtext.data import get_tokenizer
+from torchtext.vocab import build_vocab_from_iterator
+from translation_dataset import TranslationDataset
+
+PROJECT_DIR = os.path.expanduser("~/Vietnamese-Poem-Generation/")
+sys.path.append(PROJECT_DIR)
+from constants import SRC_LANGUAGE, TGT_LANGUAGE, UNK_IDX, SPECIAL_SYMBOLS
+
+
+# Tokenize for vietnames by underthesea
+def vi_tokenizer(sentence):
+    """
+    Tokenizes Vietnamese text using the underthesea library.
+
+    Args:
+        sentence (str): Input sentence.
+
+    Returns:
+        List of tokens.
+    """
+    tokens = word_tokenize(sentence)
+    return tokens
+
+# Tokenizer dictionary
+def get_token_transforms():
+    """
+    Returns a dictionary containing tokenizers for both source (English) 
+    and target (Vietnamese) languages.
+    """
+    return {
+        SRC_LANGUAGE: get_tokenizer('basic_english'),
+        TGT_LANGUAGE: get_tokenizer(vi_tokenizer)
+    }
+
+
+def yield_tokens(dataset, lang, token_transform):
+    """
+    Yields tokenized sentences from the dataset for vocabulary building.
+
+    Args:
+        dataset (Dataset): The dataset object.
+        lang (str): Language key ('en' or 'vi').
+        token_transform (dict): Tokenizer dictionary.
+
+    Yields:
+        List of tokens from the dataset.
+    """
+    lang_key = "source_text" if lang == SRC_LANGUAGE else "target_text"
+    for sample in dataset:
+        yield token_transform[lang](sample[lang_key])
+
+def build_vocabulary(source_file, target_file, min_freq=1):
+    """
+    Builds vocabularies for both source and target languages.
+
+    Args:
+        source_file (str): Path to the source (English) text file.
+        target_file (str): Path to the target (Vietnamese) text file.
+        min_freq (int, optional): Minimum frequency of words to be included in vocab (default=1).
+
+    Returns:
+        dict: Dictionary containing vocab objects for both languages.
+    """
+    dataset = TranslationDataset(source_file, target_file)
+    token_transform = get_token_transforms()
+    vocab_transform = {}
+
+    for lang in [SRC_LANGUAGE, TGT_LANGUAGE]:
+        vocab_transform[lang] = build_vocab_from_iterator(
+            yield_tokens(dataset, lang, token_transform),
+            min_freq=min_freq,
+            specials=SPECIAL_SYMBOLS,
+            special_first=True
+        )
+        vocab_transform[lang].set_default_index(UNK_IDX)  # Set default index for unknown words
+
+    return vocab_transform
