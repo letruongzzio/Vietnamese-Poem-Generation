@@ -7,8 +7,8 @@ class TranslationDataset(Dataset):
         Dataset for Machine Translation (MT) tasks.
 
         Args:
-            source_file (str): Path to the file containing source sentences (English).
-            target_file (str): Path to the file containing target sentences (Vietnamese).
+            source_file (str): Path to the file containing source sentences (Vietnamese).
+            target_file (str): Path to the file containing target sentences (English).
         """
         self.source_sentences, self.target_sentences, self.num_rows = self._load_files(source_file, target_file)
 
