@@ -3,6 +3,9 @@ import os
 PROJECT_DIR = os.path.expanduser("~/Vietnamese-Poem-Generation/")
 DATA_DIR = os.path.join(PROJECT_DIR, "data/")
 TRANSLATION_DATA_DIR = os.path.join(DATA_DIR, "translation_data/")
+TRANSLATION_TRAIN_DIR = os.path.join(TRANSLATION_DATA_DIR, "train/")
+TRANSLATION_VAL_DIR = os.path.join(TRANSLATION_DATA_DIR, "val/")
+TRANSLATION_TEST_DIR = os.path.join(TRANSLATION_DATA_DIR, "test/")
 POEM_DATA_DIR = os.path.join(DATA_DIR, "poem_data/")
 SRC_LANGUAGE = 'en'
 TGT_LANGUAGE = 'vi'
