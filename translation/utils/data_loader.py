@@ -24,15 +24,7 @@ def get_text_transforms(vocab_transform):
     token_transform = get_token_transforms()
 
     def sequential_transforms(*transforms):
-        """
-        Helper function to apply multiple sequential transformations.
-
-        Args:
-            *transforms: Multiple transformation functions.
-
-        Returns:
-            func: A function that applies all transformations in sequence.
-        """
+        """Helper function to apply multiple sequential transformations."""
         def func(txt_input):
             for transform in transforms:
                 txt_input = transform(txt_input)
@@ -59,15 +51,7 @@ def get_text_transforms(vocab_transform):
     }
 
 def truncate(sequence):
-    """
-    Truncates sequences longer than MAX_LEN.
-
-    Args:
-        sequence (Tensor): Input sequence.
-
-    Returns:
-        Tensor: Truncated sequence.
-    """
+    """Truncates sequences longer than MAX_LEN."""
     return sequence[:MAX_LEN] if sequence.size(0) > MAX_LEN else sequence
 
 def collate_fn(batch, text_transform):
@@ -89,7 +73,6 @@ def collate_fn(batch, text_transform):
         src_batch.append(src_sample)
         tgt_batch.append(tgt_sample)
 
-    # Using `pad_sequence` to pad each sequence to the same length
     src_batch = pad_sequence(src_batch, padding_value=PAD_IDX, batch_first=True)
     src_batch = truncate(src_batch)
     tgt_batch = pad_sequence(tgt_batch, padding_value=PAD_IDX, batch_first=True)
@@ -97,7 +80,7 @@ def collate_fn(batch, text_transform):
 
     return src_batch, tgt_batch
 
-def get_dataloader(source_file, target_file, vocab_transform, batch_size, shuffle=True, num_workers=4):
+def get_dataloader(source_file, target_file, vocab_transform, batch_size, mode="train", num_workers=4):
     """
     Creates a DataLoader for the translation dataset.
 
@@ -106,7 +89,7 @@ def get_dataloader(source_file, target_file, vocab_transform, batch_size, shuffl
         target_file (str): Path to the target (English) text file.
         batch_size (int, optional): Batch size (default=32).
         shuffle (bool, optional): Whether to shuffle the dataset (default=True).
-        num_workers (int, optional): Number of workers for data loading (default=0).
+        num_workers (int, optional): Number of workers for data loading (default=4).
 
     Returns:
         DataLoader: A PyTorch DataLoader for batching the dataset.
@@ -114,5 +97,7 @@ def get_dataloader(source_file, target_file, vocab_transform, batch_size, shuffl
     dataset = TranslationDataset(source_file, target_file)
     text_transform = get_text_transforms(vocab_transform)
 
-    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers,
+    return DataLoader(dataset, batch_size=batch_size, shuffle=(mode == "train"), num_workers=num_workers,
                       collate_fn=lambda batch: collate_fn(batch, text_transform))
+
+
