@@ -29,8 +29,8 @@ def get_token_transforms():
         return word_tokenize(sentence)
     
     return {
-        SRC_LANGUAGE: get_tokenizer('basic_english'),
-        TGT_LANGUAGE: get_tokenizer(vi_tokenizer)
+        SRC_LANGUAGE: get_tokenizer(vi_tokenizer),
+        TGT_LANGUAGE: get_tokenizer("basic_english")
     }
 
 def yield_tokens(dataset, lang, token_transform):
@@ -76,8 +76,8 @@ def build_vocabulary(source_file, target_file, min_freq=1, num_workers=4):
     Builds vocabularies for both source and target languages in parallel.
 
     Args:
-        source_file (str): Path to the source (English) text file.
-        target_file (str): Path to the target (Vietnamese) text file.
+        source_file (str): Path to the target (Vietnamese) text file.
+        target_file (str): Path to the source (English) text file.
         min_freq (int, optional): Minimum frequency of words to be included in vocab (default=1).
 
     Returns:
@@ -89,10 +89,10 @@ def build_vocabulary(source_file, target_file, min_freq=1, num_workers=4):
 
     # Use multi-threading to build vocab for both languages simultaneously
     with concurrent.futures.ThreadPoolExecutor(num_workers) as executor:
-        future_en = executor.submit(build_vocab_for_lang, dataset, SRC_LANGUAGE, token_transform, min_freq)
-        future_vi = executor.submit(build_vocab_for_lang, dataset, TGT_LANGUAGE, token_transform, min_freq)
+        future_vi = executor.submit(build_vocab_for_lang, dataset, SRC_LANGUAGE, token_transform, min_freq)
+        future_en = executor.submit(build_vocab_for_lang, dataset, TGT_LANGUAGE, token_transform, min_freq)
 
-        vocab_transform[SRC_LANGUAGE] = future_en.result()
-        vocab_transform[TGT_LANGUAGE] = future_vi.result()
+        vocab_transform[SRC_LANGUAGE] = future_vi.result()
+        vocab_transform[TGT_LANGUAGE] = future_en.result()
 
     return vocab_transform

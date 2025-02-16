@@ -24,6 +24,7 @@ def read_data(source_file, target_file):
     assert len(source_lines) == len(target_lines), "Mismatch in number of lines!"
     return source_lines, target_lines
 
+
 def split_data(source_lines, target_lines, train_ratio=0.8, val_ratio=0.1):
     """
     Splits data into train, validation, and test sets.
@@ -58,10 +59,10 @@ def save_data(directory, prefix, source_data, target_data):
         source_data (list): List of source sentences.
         target_data (list): List of target sentences.
     """
-    with open(os.path.join(directory, f"{prefix}.en"), "w", encoding="utf-8") as src_f:
+    with open(os.path.join(directory, f"{prefix}.vi"), "w", encoding="utf-8") as src_f:
         src_f.writelines(source_data)
 
-    with open(os.path.join(directory, f"{prefix}.vi"), "w", encoding="utf-8") as tgt_f:
+    with open(os.path.join(directory, f"{prefix}.en"), "w", encoding="utf-8") as tgt_f:
         tgt_f.writelines(target_data)
 
 
