@@ -1,6 +1,7 @@
 import os
 import sys
 import torch
+import sacrebleu
 
 PROJECT_DIR = os.path.expanduser("~/Vietnamese-Poem-Generation/")
 UTILS_DIR = os.path.join(PROJECT_DIR, "translation/utils")
@@ -110,6 +111,7 @@ def test_model(model, test_loader, vocab, device, num_examples=5):
     """
     model.eval()
     example_count = 0
+    pred_sentences, ref_sentences = [], []
     with torch.no_grad():
         for src_batch, tgt_batch in test_loader:
             src_batch = src_batch.to(device)
@@ -119,6 +121,8 @@ def test_model(model, test_loader, vocab, device, num_examples=5):
                 tgt_tensor = tgt_batch[i].cpu().tolist()
                 reference_sentence = tensor_to_sentence(tgt_tensor, vocab, TGT_LANGUAGE)
                 predicted_sentence = translate_tensor(src_tensor, model, vocab, device)
+                pred_sentences.append(predicted_sentence)
+                ref_sentences.append(reference_sentence)
                 example_count += 1
                 print(f"Example {example_count}:")
                 print("Input:     ", input_sentence)
@@ -126,4 +130,4 @@ def test_model(model, test_loader, vocab, device, num_examples=5):
                 print("Prediction:", predicted_sentence)
                 print("-" * 50)
                 if example_count >= num_examples:
-                    return
+                    return sacrebleu.corpus_bleu(pred_sentences, [ref_sentences], force=True)
