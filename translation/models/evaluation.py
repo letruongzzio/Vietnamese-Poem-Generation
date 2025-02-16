@@ -98,7 +98,7 @@ def tensor_to_sentence(token_ids, vocab, language):
     return " ".join(tokens)
 
 
-def test_model(model, test_loader, vocab, device):
+def test_model(model, test_loader, vocab, device, num_examples=5):
     """
     Evaluate the model on the test_loader, print the source sentence, reference sentence, and predicted sentence.
 
@@ -125,3 +125,5 @@ def test_model(model, test_loader, vocab, device):
                 print("Reference: ", reference_sentence)
                 print("Prediction:", predicted_sentence)
                 print("-" * 50)
+                if example_count >= num_examples:
+                    return
