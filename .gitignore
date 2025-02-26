@@ -1,1 +1,8 @@
 data/vietnamese_poem.csv
+data/poem_dataset.csv
+notebooks/.vector_cache/glove.6B.50d.txt
+notebooks/.vector_cache/glove.6B.100d.txt
+notebooks/.vector_cache/glove.6B.100d.txt.pt
+notebooks/.vector_cache/glove.6B.200d.txt
+notebooks/.vector_cache/glove.6B.300d.txt
+notebooks/.vector_cache/glove.6B.zip
