@@ -3,7 +3,6 @@ import sys
 import re
 import concurrent.futures
 from underthesea import word_tokenize
-from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 
 PROJECT_ROOT = os.path.expanduser('~/vietnamese-poem-generation')

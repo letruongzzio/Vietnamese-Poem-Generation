@@ -99,7 +99,7 @@ def prepare_sample(sample, tokenizer, vocab, max_seq_len):
     input_seqs = []
     target_seqs = []
     padding_masks = []
-    input_text = '<sos> ' + ' <eol> '.join(sample) + ' <eol> <eos>'
+    input_text = '<sos> ' + ' <eol> '.join(sample) + ' <eol>' + ' <eos>'
     tokens = tokenizer(input_text)
     for idx in range(1, len(tokens)):
         input_seq_text = ' '.join(tokens[:idx])
