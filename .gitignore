@@ -6,3 +6,7 @@ notebooks/.vector_cache/glove.6B.100d.txt.pt
 notebooks/.vector_cache/glove.6B.200d.txt
 notebooks/.vector_cache/glove.6B.300d.txt
 notebooks/.vector_cache/glove.6B.zip
+storage/poem_dataset.pkl
+storage/poem_transformer.pt
+storage/poem_dataset.pkl
+storage/poem_dataset.pkl
