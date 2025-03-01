@@ -80,8 +80,6 @@ def inference(model, vocab, input_text, device, tokenizer=custom_tokenize, max_s
             next_token_id = sample_with_temperature(logits, temperature)
             generated_ids.append(next_token_id)
             input_ids = generated_ids.copy()
-            if next_token_id == EOL_IDX:
-                print('Reached <eol> symbol')
             if next_token_id == EOS_IDX:
                 break
 
